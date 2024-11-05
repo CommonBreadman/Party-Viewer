@@ -305,110 +305,6 @@ function gainExperience(commander, won, challengeFactor) {
     }
 }
 
-
-document.getElementById('battleForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-
-    const commander1 = new Commander(
-        formData.get('commander1_name'),
-        parseInt(formData.get('commander1_strength')),
-        parseInt(formData.get('commander1_intelligence')),
-        parseInt(formData.get('commander1_agility')),
-        parseInt(formData.get('commander1_stamina')),
-        parseInt(formData.get('commander1_leadership')),
-        parseInt(formData.get('commander1_experience')),
-        parseInt(formData.get('commander1_skill')),
-        formData.get('commander1_traits').split(',')
-    );
-
-    const commander2 = new Commander(
-        formData.get('commander2_name'),
-        parseInt(formData.get('commander2_strength')),
-        parseInt(formData.get('commander2_intelligence')),
-        parseInt(formData.get('commander2_agility')),
-        parseInt(formData.get('commander2_stamina')),
-        parseInt(formData.get('commander2_leadership')),
-        parseInt(formData.get('commander2_experience')),
-        parseInt(formData.get('commander2_skill')),
-        formData.get('commander2_traits').split(',')
-    );
-
-    const equipment1 = new Equipment(
-        parseInt(formData.get('equipment1_artillery')),
-        parseInt(formData.get('equipment1_tanks')),
-        parseInt(formData.get('equipment1_apcs')),
-        parseInt(formData.get('equipment1_anti_air')),
-        parseInt(formData.get('equipment1_anti_tank')),
-        parseInt(formData.get('equipment1_air_superiority')),
-        parseInt(formData.get('equipment1_planes')),
-        parseInt(formData.get('equipment1_base_equipment'))
-    );
-
-    const division1 = new Division(
-        formData.get('division1_name'),
-        parseInt(formData.get('division1_attack')),
-        parseInt(formData.get('division1_defense')),
-        parseInt(formData.get('division1_morale')),
-        parseInt(formData.get('division1_size')),
-        parseFloat(formData.get('division1_fatigue')),
-        parseInt(formData.get('division1_troop_count')),
-        equipment1,
-        parseInt(formData.get('division1_organization')),
-        parseInt(formData.get('division1_skill')),
-        formData.get('division1_strategy')
-    );
-
-    const equipment2 = new Equipment(
-        parseInt(formData.get('equipment2_artillery')),
-        parseInt(formData.get('equipment2_tanks')),
-        parseInt(formData.get('equipment2_apcs')),
-        parseInt(formData.get('equipment2_anti_air')),
-        parseInt(formData.get('equipment2_anti_tank')),
-        parseInt(formData.get('equipment2_air_superiority')),
-        parseInt(formData.get('equipment2_planes')),
-        parseInt(formData.get('equipment2_base_equipment'))
-    );
-
-    const division2 = new Division(
-        formData.get('division2_name'),
-        parseInt(formData.get('division2_attack')),
-        parseInt(formData.get('division2_defense')),
-        parseInt(formData.get('division2_morale')),
-        parseInt(formData.get('division2_size')),
-        parseFloat(formData.get('division2_fatigue')),
-        parseInt(formData.get('division2_troop_count')),
-        equipment2,
-        parseInt(formData.get('division2_organization')),
-        parseInt(formData.get('division2_skill')),
-        formData.get('division2_strategy')
-    );
-
-    const airforce1 = new AirForce(
-        parseInt(formData.get('airforce1_aircraft_quality')),
-        parseInt(formData.get('airforce1_aircraft_quantity')),
-        parseInt(formData.get('airforce1_pilot_skill')),
-        parseInt(formData.get('airforce1_logistics')),
-        parseInt(formData.get('airforce1_radar_coverage')),
-        parseInt(formData.get('airforce1_anti_air_support'))
-    );
-
-    const airforce2 = new AirForce(
-        parseInt(formData.get('airforce2_aircraft_quality')),
-        parseInt(formData.get('airforce2_aircraft_quantity')),
-        parseInt(formData.get('airforce2_pilot_skill')),
-        parseInt(formData.get('airforce2_logistics')),
-        parseInt(formData.get('airforce2_radar_coverage')),
-        parseInt(formData.get('airforce2_anti_air_support'))
-    );
-
-    // Change here from calculate_battle_score to calculateBattleScore
-    const results = calculateBattleScore(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
-    document.getElementById('result').textContent = JSON.stringify(results);
-});
-
-
 function calculateBattleScore(commander1, division1, commander2, division2, airforce1, airforce2, terrain = "hills") {
     /** 
      * Calculate the battle score between two commanders and their divisions.
@@ -534,9 +430,113 @@ function calculateBattleScore(commander1, division1, commander2, division2, airf
         estimatedDuration: battleDuration
     };
 }
+document.getElementById('battleForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-const results = calculate_battle_score(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
-console.log(results);
+    const formData = new FormData(event.target);
+
+    const commander1 = new Commander(
+        formData.get('commander1_name'),
+        parseInt(formData.get('commander1_strength')),
+        parseInt(formData.get('commander1_intelligence')),
+        parseInt(formData.get('commander1_agility')),
+        parseInt(formData.get('commander1_stamina')),
+        parseInt(formData.get('commander1_leadership')),
+        parseInt(formData.get('commander1_experience')),
+        parseInt(formData.get('commander1_skill')),
+        formData.get('commander1_traits').split(',')
+    );
+
+    const commander2 = new Commander(
+        formData.get('commander2_name'),
+        parseInt(formData.get('commander2_strength')),
+        parseInt(formData.get('commander2_intelligence')),
+        parseInt(formData.get('commander2_agility')),
+        parseInt(formData.get('commander2_stamina')),
+        parseInt(formData.get('commander2_leadership')),
+        parseInt(formData.get('commander2_experience')),
+        parseInt(formData.get('commander2_skill')),
+        formData.get('commander2_traits').split(',')
+    );
+
+    const equipment1 = new Equipment(
+        parseInt(formData.get('equipment1_artillery')),
+        parseInt(formData.get('equipment1_tanks')),
+        parseInt(formData.get('equipment1_apcs')),
+        parseInt(formData.get('equipment1_anti_air')),
+        parseInt(formData.get('equipment1_anti_tank')),
+        parseInt(formData.get('equipment1_air_superiority')),
+        parseInt(formData.get('equipment1_planes')),
+        parseInt(formData.get('equipment1_base_equipment'))
+    );
+
+    const division1 = new Division(
+        formData.get('division1_name'),
+        parseInt(formData.get('division1_attack')),
+        parseInt(formData.get('division1_defense')),
+        parseInt(formData.get('division1_morale')),
+        parseInt(formData.get('division1_size')),
+        parseFloat(formData.get('division1_fatigue')),
+        parseInt(formData.get('division1_troop_count')),
+        equipment1,
+        parseInt(formData.get('division1_organization')),
+        parseInt(formData.get('division1_skill')),
+        formData.get('division1_strategy')
+    );
+
+    const equipment2 = new Equipment(
+        parseInt(formData.get('equipment2_artillery')),
+        parseInt(formData.get('equipment2_tanks')),
+        parseInt(formData.get('equipment2_apcs')),
+        parseInt(formData.get('equipment2_anti_air')),
+        parseInt(formData.get('equipment2_anti_tank')),
+        parseInt(formData.get('equipment2_air_superiority')),
+        parseInt(formData.get('equipment2_planes')),
+        parseInt(formData.get('equipment2_base_equipment'))
+    );
+
+    const division2 = new Division(
+        formData.get('division2_name'),
+        parseInt(formData.get('division2_attack')),
+        parseInt(formData.get('division2_defense')),
+        parseInt(formData.get('division2_morale')),
+        parseInt(formData.get('division2_size')),
+        parseFloat(formData.get('division2_fatigue')),
+        parseInt(formData.get('division2_troop_count')),
+        equipment2,
+        parseInt(formData.get('division2_organization')),
+        parseInt(formData.get('division2_skill')),
+        formData.get('division2_strategy')
+    );
+
+    const airforce1 = new AirForce(
+        parseInt(formData.get('airforce1_aircraft_quality')),
+        parseInt(formData.get('airforce1_aircraft_quantity')),
+        parseInt(formData.get('airforce1_pilot_skill')),
+        parseInt(formData.get('airforce1_logistics')),
+        parseInt(formData.get('airforce1_radar_coverage')),
+        parseInt(formData.get('airforce1_anti_air_support'))
+    );
+
+    const airforce2 = new AirForce(
+        parseInt(formData.get('airforce2_aircraft_quality')),
+        parseInt(formData.get('airforce2_aircraft_quantity')),
+        parseInt(formData.get('airforce2_pilot_skill')),
+        parseInt(formData.get('airforce2_logistics')),
+        parseInt(formData.get('airforce2_radar_coverage')),
+        parseInt(formData.get('airforce2_anti_air_support'))
+    );
+
+    const results = calculateBattleScore(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
+    console.log(results);
+    // Change here from calculate_battle_score to calculateBattleScore
+
+});
+
+
+
+
+
 
     </script>
 </body>
