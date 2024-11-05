@@ -305,6 +305,7 @@ function gainExperience(commander, won, challengeFactor) {
     }
 }
 
+
 document.getElementById('battleForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -402,9 +403,137 @@ document.getElementById('battleForm').addEventListener('submit', function(event)
         parseInt(formData.get('airforce2_anti_air_support'))
     );
 
-    const results = calculate_battle_score(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
+    // Change here from calculate_battle_score to calculateBattleScore
+    const results = calculateBattleScore(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
     document.getElementById('result').textContent = JSON.stringify(results);
 });
+
+
+function calculateBattleScore(commander1, division1, commander2, division2, airforce1, airforce2, terrain = "hills") {
+    /** 
+     * Calculate the battle score between two commanders and their divisions.
+     * @param {Object} commander1 - The first commander's attributes.
+     * @param {Object} division1 - The first division's attributes.
+     * @param {Object} commander2 - The second commander's attributes.
+     * @param {Object} division2 - The second division's attributes.
+     * @param {Object} airforce1 - The air support for the first side.
+     * @param {Object} airforce2 - The air support for the second side.
+     * @param {string} terrain - The type of terrain for the battle (default "hills").
+     * @returns {Object} - An object containing battle results, scores, losses, and victory types.
+     */
+
+    // Input validation
+    if (typeof division1.troopCount !== 'number' || division1.troopCount <= 0) {
+        throw new Error("Division 1 must have a valid troop count.");
+    }
+    if (typeof division2.troopCount !== 'number' || division2.troopCount <= 0) {
+        throw new Error("Division 2 must have a valid troop count.");
+    }
+
+    const battleDuration = estimateBattleDuration(division1, division2);
+    
+    const effectiveness1 = calculateCommanderEffectiveness(commander1);
+    const effectiveness2 = calculateCommanderEffectiveness(commander2);
+
+    const entrenchmentBonus1 = calculateEntrenchmentBonus(battleDuration);
+    const entrenchmentBonus2 = calculateEntrenchmentBonus(battleDuration);
+
+    const strategy1 = strategies[division1.strategy] || {};
+    const strategy2 = strategies[division2.strategy] || {};
+
+    let power1 = calculateDivisionCombatPower(division1) * entrenchmentBonus1;
+    let power2 = calculateDivisionCombatPower(division2) * entrenchmentBonus2;
+
+    // Apply strategy modifiers if conditions are met
+    if (strategy1.conditions && strategy1.conditions.every(condition => condition(division1))) {
+        power1 *= (1 + strategy1.attackModifier);
+        power1 *= (1 + strategy1.defenseModifier);
+    }
+
+    if (strategy2.conditions && strategy2.conditions.every(condition => condition(division2))) {
+        power2 *= (1 + strategy2.attackModifier);
+        power2 *= (1 + strategy2.defenseModifier);
+    }
+
+    power1 *= luckFactor();
+    power2 *= luckFactor();
+
+    const critHit1 = calculateCriticalHit(commander1, division1);
+    const critHit2 = calculateCriticalHit(commander2, division2);
+    power1 *= critHit1;
+    power2 *= critHit2;
+
+    const terrainModifier = calculateTerrainModifier(terrain);
+    power1 *= terrainModifier;
+    power2 *= terrainModifier;
+
+    let totalScore1 = effectiveness1 + power1;
+    let totalScore2 = effectiveness2 + power2;
+
+    const airSuperiority1 = calculateAirSuperiority(airforce1);
+    const airSuperiority2 = calculateAirSuperiority(airforce2);
+
+    totalScore1 += airSuperiority1 * 1.5;
+    totalScore2 += airSuperiority2 * 1.5;
+
+    const troopLosses1 = calculateTroopLosses(division1, division2, totalScore1, totalScore2);
+    const troopLosses2 = calculateTroopLosses(division2, division1, totalScore2, totalScore1);
+
+    const equipLosses1 = calculateEquipmentLosses(division1, division2, totalScore1, totalScore2, airforce1);
+    const equipLosses2 = calculateEquipmentLosses(division2, division1, totalScore2, totalScore1, airforce2);
+
+    let victoryType1 = determineVictoryType(troopLosses2, division2.troopCount);
+    let victoryType2 = determineVictoryType(troopLosses1, division1.troopCount);
+
+    // Determine the victory types based on the results
+    if (victoryType1 === "Total Victory") {
+        victoryType2 = "Total Defeat";
+    } else if (victoryType2 === "Total Victory") {
+        victoryType1 = "Total Defeat";
+    }
+
+    if (victoryType1 === "Victory" && victoryType2 === "Victory") {
+        if (totalScore1 > totalScore2) {
+            victoryType2 = "Defeat";
+        } else {
+            victoryType1 = "Defeat";
+        }
+    }
+
+    if (victoryType1 === "Minor Victory" && victoryType2 === "Minor Victory") {
+        if (totalScore1 > totalScore2) {
+            victoryType2 = "Minor Defeat";
+        } else {
+            victoryType1 = "Minor Defeat";
+        }
+    }
+
+    if (battleDuration >= 327 && !(victoryType1 === "Total Victory" || victoryType2 === "Total Victory")) {
+        return {
+            commander1Score: totalScore1,
+            commander2Score: totalScore2,
+            troopLosses1: troopLosses1,
+            troopLosses2: troopLosses2,
+            equipmentLosses1: equipLosses1,
+            equipmentLosses2: equipLosses2,
+            victoryType1: "Draw",
+            victoryType2: "Draw",
+            estimatedDuration: battleDuration
+        };
+    }
+
+    return {
+        commander1Score: totalScore1,
+        commander2Score: totalScore2,
+        troopLosses1: troopLosses1,
+        troopLosses2: troopLosses2,
+        equipmentLosses1: equipLosses1,
+        equipmentLosses2: equipLosses2,
+        victoryType1: victoryType1,
+        victoryType2: victoryType2,
+        estimatedDuration: battleDuration
+    };
+}
 
 const results = calculate_battle_score(commander1, division1, commander2, division2, airforce1, airforce2, "hills");
 console.log(results);
