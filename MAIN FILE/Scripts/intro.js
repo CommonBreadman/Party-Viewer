@@ -42,5 +42,5 @@ function main(){
 
 }
 function welcome(){
-    sleep(1).then(()=>{window.location.replace("../MAIN FILE/Sub/main.html")})
+    sleep(1).then(()=>{window.location.replace("../Party-Viewer/MAIN FILE/Sub/main.html")})
 }
