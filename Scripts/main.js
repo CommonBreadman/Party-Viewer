@@ -6,7 +6,7 @@ function sleep(s) {
 function main(){
 
     Vos.onclick = () => {
-        let beep = new Audio('../Assets/beep.mp3')
+        let beep = new Audio('../assets/beep.mp3')
         beep.play();
             sleep(0.2).then(() => {window.location.replace("vostats.html")})
     }

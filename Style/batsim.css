@@ -2,6 +2,8 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+
 }
 header{
     height: 20%;
@@ -18,10 +20,18 @@ section>ul{
     list-style: none;
     margin-left: 20%;
 }
-li>button{
-    padding: 20px;
-    font-size: 48px;
+form{
+    width: 100%;
+    cursor: url('../assets/cursor.cur'), auto;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button{
+    padding: 10px;
+    font-size: 1.2vw;
     border: 3px solid #0e2;
+    border-radius: 15px;
     color: #0e2;
     font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
     background-color: #0000;
@@ -35,6 +45,17 @@ li>button{
         opacity: 50%;
     }
 
+}
+input{
+    padding: 10px;
+    font-size: 1.2vw;
+    border: 3px solid #0e2;
+    border-radius: 15px;
+    color: #0e2;
+    font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+    background-color: #0000;
+    transition: 0.1s;
+    cursor: url('../Assets/cursor.cur'), auto;
 }
 h1{
     font-size: 4vw;

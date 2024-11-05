@@ -3,9 +3,9 @@ function sleep(s) {
     return new Promise(resolve => setTimeout(resolve, s*1000));
 }
 function launch(){
-    let beep = new Audio('../Assets/beep.mp3');
+    let beep = new Audio('../assets/beep.mp3');
     beep.play();
-    const intro = new Audio('../Assets/intronew.mp3');
+    const intro = new Audio('../assets/intronew.mp3');
     let ptr = document.querySelectorAll(".ptr");
     sleep(1.5).then(()=>{log.classList.remove("blinker")})
     sleep(1.5).then(()=>{log.innerHTML = "Authorizing..."})

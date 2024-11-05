@@ -71,10 +71,12 @@ h1{
 }
 #phot{
     height: 80%;
+
 }
 #phot>td>img{
     max-height: 100%;
     max-width:100%;
+
 }
 #nslot{
     height: 20%;

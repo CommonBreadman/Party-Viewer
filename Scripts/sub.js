@@ -8,7 +8,7 @@ function main(){
     document.onkeyup = function(e){
         if(e.key == "Escape" && !ex){
             ex = true;
-            sleep(0.2).then(() => {window.location.replace("Main.html")})
+            sleep(0.2).then(() => {window.location.replace("main.html")})
         }
     }
 
